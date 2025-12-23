@@ -1,6 +1,8 @@
+'use cache'
+
+// 开启use cache执行，对当前组件进行缓存
 import Sidenav from '@/app/ui/dashboard/sidenav'
-export default function Layout({children}:{children:React.ReactNode}) {
-    console.log(children);
+export default async function Layout({children}:{children:React.ReactNode}) {
     return <div className='flex h-screen flex-col md:flex-row md:overflow-hidden'>
         <div className='flex-none md:w-64 w-full'>
             <Sidenav />
