@@ -6,6 +6,11 @@ import { inter } from '@/app/ui/font';
 import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
 import { fetchInvoicesPages } from '@/app/lib/data';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: '发票 | Acme 仪表盘',
+};
 
 export default async function Page(props :{
     searchParams?: Promise<{

@@ -3,6 +3,8 @@ import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import z from 'zod'
+import { signIn } from '@/auth'
+import { AuthError } from 'next-auth';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 const FormSchema = z.object({
@@ -31,7 +33,7 @@ const CreateInvoice = FormSchema.omit({ id: true, date: true });
 const UpdateInvoice = FormSchema.omit({ date: true });
 
 
-// 通过添加'use server'，将文件中的所有导出函数标记为服务端操作。然后可以在客户端和服务端组件中导入和使用这些服务端函数。
+// 通过添加'use server'，将文件中的所有导出函数标记为服务端操作。然后可以在客户端组件和服务端组件中导入和使用这些服务端函数。
 // 此文件中未使用的任何函数将自动从最终应用程序包中删除。
 // 另外，还可以通过将 "use server" 添加到操作内部来直接在服务端组件中编写服务端操作。
 export const createInvoice = async (preState: State, formData: FormData) => {
@@ -116,4 +118,21 @@ export const deleteInvoice = async (id: string) => {
     await sql`DELETE FROM invoices WHERE id = ${id}`;
     // 只需要缓存，不需要改变路由
     revalidatePath('/dashboard/invoices');
+}
+
+// 针对react19的useActionState调整服务端方法
+export const authenticate = async (preState: string | undefined, formData: FormData) => {
+    try {
+        await signIn('credentials', formData);
+    } catch (error) {
+        if (error instanceof AuthError) {
+            switch (error.type) {
+                case 'CredentialsSignin':
+                    return 'Invalid credentials.';
+                default:
+                    return 'Something went wrong.';
+            }
+        }
+    throw error;
+    }
 }
