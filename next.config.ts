@@ -1,11 +1,11 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   /* config options here */
-  // experimental: {
-  //   ppr: 'incremental'
-  // },
-  cacheComponents:true
-};
+  experimental: {
+    useCache: true,
+  },
+  cacheComponents: true,
+}
 
-export default nextConfig;
+export default nextConfig

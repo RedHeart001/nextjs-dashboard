@@ -1,29 +1,26 @@
-'use client'
+"use client"
 // 只有客户端组件才能使用react hook
 
-import { CustomerField, Invoice } from '@/app/lib/definitions';
-import Link from 'next/link';
+import { CustomerField, Invoice } from "@/app/lib/definitions"
+import Link from "next/link"
 import {
   CheckIcon,
   ClockIcon,
   CurrencyDollarIcon,
   UserCircleIcon,
-} from '@heroicons/react/24/outline';
-import { Button } from '@/app/ui/button';
-import { createInvoice, State } from '@/app/lib/actions';
-
+} from "@heroicons/react/24/outline"
+import { Button } from "@/app/ui/button"
+import { createInvoice, State } from "@/app/lib/actions"
 
 // useActionState 是 React 19 中引入的一个新 Hook，它根据表单提交（Action）的结果来管理和更新组件的状态。
 // 其核心作用是简化异步表单提交时常见状态（如错误、加载中、返回值）的处理
-import { useActionState } from 'react';
+import { useActionState } from "react"
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
-  const initialState: State = { message: null, errors: {} };
-  const [state, formAction] = useActionState(createInvoice, initialState);
+  const initialState: State = { message: null, errors: {} }
+  const [state, formAction] = useActionState(createInvoice, initialState)
   return (
-    <form
-      action={formAction}
-      aria-describedby='form-error'>
+    <form action={formAction} aria-describedby="form-error">
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
@@ -101,7 +98,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   name="status"
                   type="radio"
                   value="pending"
-                  aria-describedby='status-error'
+                  aria-describedby="status-error"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -117,7 +114,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   name="status"
                   type="radio"
                   value="paid"
-                  aria-describedby='status-error'
+                  aria-describedby="status-error"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -130,22 +127,21 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
             </div>
           </div>
           <div id="status-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.status &&
-                state.errors.status.map((error: string) => (
-                  <p className="mt-2 text-sm text-red-500" key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
+            {state.errors?.status &&
+              state.errors.status.map((error: string) => (
+                <p className="mt-2 text-sm text-red-500" key={error}>
+                  {error}
+                </p>
+              ))}
+          </div>
         </fieldset>
 
         <div id="form-error" aria-live="polite" aria-atomic="true">
-          {
-            state.message &&
+          {state.message && (
             <p className="mt-2 text-sm text-red-500" key={"formError"}>
               {state.message}
             </p>
-          }
+          )}
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">
@@ -158,5 +154,5 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         <Button type="submit">Create Invoice</Button>
       </div>
     </form>
-  );
+  )
 }

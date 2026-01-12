@@ -1,8 +1,24 @@
-import { Metadata } from 'next';
+import { fetchFilteredCustomers } from "@/app/lib/data"
+import CustomersTable from "@/app/ui/customers/table"
+import { Metadata } from "next"
 
 export const metadata: Metadata = {
-    title: '客户 | Acme 仪表盘',
-};
-export default function Page() {
-    return <p>仪表盘-客户page页面</p>;
+  title: "客户 | Acme 仪表盘",
+}
+export default async function Page(props: {
+  searchParams?: Promise<{
+    query?: string
+    page?: string
+  }>
+}) {
+  const searchParams = await props.searchParams
+  const query = searchParams?.query || ""
+
+  const customers = await fetchFilteredCustomers(query)
+
+  return (
+    <main>
+      <CustomersTable customers={customers} />
+    </main>
+  )
 }
